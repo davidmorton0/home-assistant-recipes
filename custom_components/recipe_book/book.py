@@ -30,6 +30,8 @@ class RecipeBook:
         self.hass = hass
         self.store = RecipeStore(directory)
         self.recipes: list[dict[str, Any]] = []
+        # Goes up on every reload, so sensor.recipe_book changes even when the count does not.
+        self.revision = 0
         self._lock = asyncio.Lock()
         self._validator = RecipeValidator()
 
@@ -43,6 +45,7 @@ class RecipeBook:
 
     async def async_reload(self) -> None:
         self.recipes = await self.hass.async_add_executor_job(self.store.load)
+        self.revision += 1
         async_dispatcher_send(self.hass, SIGNAL_RECIPES_UPDATED)
 
     async def async_add(self, data: dict[str, Any]) -> dict[str, Any]:
