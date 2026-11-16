@@ -38,9 +38,19 @@ class RecipeCountSensor(SensorEntity):
         self.book = book
         self._attr_unique_id = f"{entry.entry_id}_count"
 
+    # Not stored in the recorder; it only signals the card.
+    _unrecorded_attributes = frozenset({"revision"})
+
     @property
     def native_value(self) -> int:
         return len(self.book.recipes)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, int]:
+        # Home Assistant moves last_updated only when the state or an attribute
+        # changes. A status change or an edit keeps the count, so this attribute,
+        # which goes up on every reload, is what moves last_updated for the card.
+        return {"revision": self.book.revision}
 
     async def async_added_to_hass(self) -> None:
         self.async_on_remove(
@@ -49,6 +59,4 @@ class RecipeCountSensor(SensorEntity):
 
     @callback
     def _handle_update(self) -> None:
-        # Written on every change, even when the count stays the same, so the card
-        # sees last_updated move and fetches the recipes again.
         self.async_write_ha_state()

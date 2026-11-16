@@ -124,6 +124,17 @@ async def test_set_status_changes_only_the_status(hass, entry, folder):
     }
 
 
+async def test_set_status_moves_the_sensor_last_updated(hass, entry):
+    # The card refetches recipes when last_updated moves; the count stays at 1 here.
+    before = hass.states.get("sensor.recipe_book")
+    await hass.services.async_call(
+        DOMAIN, "set_status", {"uuid": "u1", "status": "Approved"}, blocking=True
+    )
+    after = hass.states.get("sensor.recipe_book")
+    assert after.state == before.state == "1"
+    assert after.last_updated > before.last_updated
+
+
 async def test_delete_recipe_removes_its_file(hass, entry, folder):
     await hass.services.async_call(DOMAIN, "delete_recipe", {"uuid": "u1"}, blocking=True)
     assert not os.path.exists(os.path.join(folder, "porridge.yaml"))
