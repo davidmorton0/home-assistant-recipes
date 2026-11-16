@@ -1,0 +1,54 @@
+reload_recipes:
+add_recipe:
+  fields:
+    name: &name
+      required: true
+      selector:
+        text:
+    category: &category
+      selector:
+        text:
+    serves: &serves
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          mode: box
+    status: &status
+      selector:
+        select:
+          options: [Untested, Attempted, Approved]
+    ingredients: &ingredients
+      required: true
+      selector:
+        text:
+          multiline: true
+    steps: &steps
+      required: true
+      selector:
+        text:
+          multiline: true
+update_recipe:
+  fields:
+    uuid: &uuid
+      required: true
+      selector:
+        text:
+    name: *name
+    category: *category
+    serves: *serves
+    status: *status
+    ingredients: *ingredients
+    steps: *steps
+set_status:
+  fields:
+    uuid: *uuid
+    status:
+      required: true
+      selector:
+        select:
+          options: [Untested, Attempted, Approved]
+delete_recipe:
+  fields:
+    uuid: *uuid

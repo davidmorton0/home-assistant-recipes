@@ -1,0 +1,107 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Recipe Book",
+        "description": "Adds a Recipes page to the sidebar. Recipes are stored as YAML files in /config/recipe_book/."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Recipe Book is already set up."
+    }
+  },
+  "services": {
+    "reload_recipes": {
+      "name": "Reload recipes",
+      "description": "Reads the recipe files again, for files changed outside Home Assistant."
+    },
+    "add_recipe": {
+      "name": "Add recipe",
+      "description": "Saves a new recipe to its own file.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "The recipe's name."
+        },
+        "category": {
+          "name": "Category",
+          "description": "Used to filter recipes. Empty means Uncategorised."
+        },
+        "serves": {
+          "name": "Serves",
+          "description": "How many people it serves. Default 2."
+        },
+        "status": {
+          "name": "Status",
+          "description": "Untested, Attempted or Approved. Default Untested."
+        },
+        "ingredients": {
+          "name": "Ingredients",
+          "description": "One ingredient per line, or a list."
+        },
+        "steps": {
+          "name": "Steps",
+          "description": "One step per line, or a list."
+        }
+      }
+    },
+    "update_recipe": {
+      "name": "Update recipe",
+      "description": "Overwrites a recipe's file with these values. The uuid stays the same.",
+      "fields": {
+        "uuid": {
+          "name": "UUID",
+          "description": "The recipe's uuid."
+        },
+        "name": {
+          "name": "Name",
+          "description": "The recipe's name."
+        },
+        "category": {
+          "name": "Category",
+          "description": "Used to filter recipes. Empty means Uncategorised."
+        },
+        "serves": {
+          "name": "Serves",
+          "description": "How many people it serves. Default 2."
+        },
+        "status": {
+          "name": "Status",
+          "description": "Untested, Attempted or Approved. Default Untested."
+        },
+        "ingredients": {
+          "name": "Ingredients",
+          "description": "One ingredient per line, or a list."
+        },
+        "steps": {
+          "name": "Steps",
+          "description": "One step per line, or a list."
+        }
+      }
+    },
+    "set_status": {
+      "name": "Set status",
+      "description": "Changes only a recipe's status.",
+      "fields": {
+        "uuid": {
+          "name": "UUID",
+          "description": "The recipe's uuid."
+        },
+        "status": {
+          "name": "Status",
+          "description": "Untested, Attempted or Approved."
+        }
+      }
+    },
+    "delete_recipe": {
+      "name": "Delete recipe",
+      "description": "Deletes a recipe's file.",
+      "fields": {
+        "uuid": {
+          "name": "UUID",
+          "description": "The recipe's uuid."
+        }
+      }
+    }
+  }
+}
