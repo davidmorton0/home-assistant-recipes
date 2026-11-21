@@ -8,9 +8,6 @@ from pathlib import Path
 
 import pytest
 
-# The Home Assistant test plugin blocks sockets; these tests talk to a local stub server.
-pytestmark = pytest.mark.enable_socket
-
 SCRIPT = (
     Path(__file__).resolve().parents[1]
     / "skill" / "recipe-to-home-assistant" / "scripts" / "recipes_to_ha.py"
@@ -31,8 +28,13 @@ def script():
 
 
 @pytest.fixture
-def ha(script, tmp_path):
-    """A stub server; `calls` holds (path, body) for each request."""
+def ha(script, tmp_path, socket_enabled):
+    """A stub server; `calls` holds (path, body) for each request.
+
+    The Home Assistant test plugin turns sockets off in its pytest_runtest_setup hook,
+    which can run after pytest-socket's `enable_socket` marker is applied. The
+    `socket_enabled` fixture runs after every setup hook, so it always wins.
+    """
     calls = []
 
     class Handler(BaseHTTPRequestHandler):
