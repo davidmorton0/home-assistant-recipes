@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 .venv312/
 tmp/*
+skill/*/config.json

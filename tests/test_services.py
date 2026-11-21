@@ -81,6 +81,26 @@ async def test_add_recipe_writes_a_file_and_updates_the_sensor(hass, entry, fold
     assert hass.states.get("sensor.recipe_book").state == "2"
 
 
+async def test_add_recipe_returns_the_new_uuid_when_asked(hass, entry, folder):
+    response = await hass.services.async_call(
+        DOMAIN, "add_recipe",
+        {"name": "Tomato soup", "ingredients": "Tomatoes", "steps": "Boil"},
+        blocking=True, return_response=True,
+    )
+    data = yaml.safe_load(open(os.path.join(folder, "tomato_soup.yaml")))[0]
+    assert response == {"uuid": data["uuid"]}
+
+
+async def test_get_recipes_returns_recipes_without_file(hass, entry):
+    response = await hass.services.async_call(
+        DOMAIN, "get_recipes", {}, blocking=True, return_response=True
+    )
+    assert response == {"recipes": [{
+        "uuid": "u1", "name": "Porridge", "category": "Breakfast", "serves": 2,
+        "status": "Untested", "ingredients": ["Oats"], "steps": ["Heat"],
+    }]}
+
+
 async def test_add_recipe_without_steps_is_refused(hass, entry):
     with pytest.raises(ServiceValidationError, match="At least one step is required"):
         await hass.services.async_call(

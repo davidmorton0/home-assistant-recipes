@@ -17,7 +17,7 @@
     },
     "add_recipe": {
       "name": "Add recipe",
-      "description": "Saves a new recipe to its own file.",
+      "description": "Saves a new recipe to its own file. With a response, returns the new recipe's uuid.",
       "fields": {
         "name": {
           "name": "Name",
@@ -102,6 +102,10 @@
           "description": "The recipe's uuid."
         }
       }
+    },
+    "get_recipes": {
+      "name": "Get recipes",
+      "description": "Returns all recipes, sorted by name."
     }
   }
 }
