@@ -52,3 +52,4 @@ set_status:
 delete_recipe:
   fields:
     uuid: *uuid
+get_recipes:

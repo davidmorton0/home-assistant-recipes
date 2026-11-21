@@ -1,0 +1,4 @@
+{
+  "base_url": "https://YOUR-HOME-ASSISTANT-ADDRESS",
+  "token": "YOUR-LONG-LIVED-ACCESS-TOKEN"
+}

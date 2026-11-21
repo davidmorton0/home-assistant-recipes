@@ -83,15 +83,31 @@ overwrites its file and keeps the file name.
 
 | Service | Fields | What it does |
 |---|---|---|
-| `recipe_book.add_recipe` | `name`, `ingredients`, `steps`, optional `category`, `serves`, `status` | Saves a new recipe to its own file. |
+| `recipe_book.add_recipe` | `name`, `ingredients`, `steps`, optional `category`, `serves`, `status` | Saves a new recipe to its own file. With a response, returns `{"uuid": ...}`. |
 | `recipe_book.update_recipe` | `uuid` plus the fields above | Overwrites that recipe's file. |
 | `recipe_book.set_status` | `uuid`, `status` | Changes only the status. |
 | `recipe_book.delete_recipe` | `uuid` | Deletes that recipe's file. |
 | `recipe_book.reload_recipes` | none | Reads the files again, after changing them outside Home Assistant. |
+| `recipe_book.get_recipes` | none | Returns `{"recipes": [...]}`, every recipe sorted by name. Response only. |
 
 `ingredients` and `steps` take a list, or text with one entry per line. Bullets
 (`-`, `*`, `•`) and numbering (`1.`, `2)`) at the start of a line are removed. A
 recipe with no name, no ingredients or no steps is refused with an error.
+
+## Claude skill: recipe from a photo
+
+`skill/recipe-to-home-assistant/` is a Claude skill that reads a photo of a
+recipe and adds it, and can list, read, correct, set the status of and delete
+recipes. It calls the services above through Home Assistant's REST API
+(`POST /api/services/recipe_book/<service>`) with a long-lived access token.
+
+1. Create a long-lived access token: your profile → **Security**. The token
+   acts as your user and can control everything that user can.
+2. Copy `config.example.json` to `config.json` in the skill folder and fill in
+   `base_url` and `token`. `config.json` is ignored by git.
+3. Zip the `recipe-to-home-assistant` folder and upload it in Claude's
+   settings under skills. Add the Home Assistant domain to the allowed domains
+   for code execution.
 
 ## Development
 
